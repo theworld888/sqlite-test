@@ -1,103 +1,106 @@
-import Image from "next/image";
+// app/page.tsx
+'use client'
+import { useEffect, useState } from 'react'
+
+type Post = {
+  id: number
+  title: string
+  content?: string
+  published: boolean
+  createdAt: string
+}
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [posts, setPosts] = useState<Post[]>([])
+  const [title, setTitle] = useState('')
+  const [content, setContent] = useState('')
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+  // 读取
+  useEffect(() => {
+    fetch('/api/posts')
+      .then((r) => r.json())
+      .then(setPosts)
+  }, [])
+
+  // 新建
+  async function createPost(e: React.FormEvent) {
+    e.preventDefault()
+    await fetch('/api/posts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title, content }),
+    })
+    setTitle('')
+    setContent('')
+    // 重新拉取
+    const updated = await fetch('/api/posts').then((r) => r.json())
+    setPosts(updated)
+  }
+
+  const getComments = (id: number) => {
+    fetch(`/api/posts/${id}/comments`)
+      .then((r) => r.json())
+      .then(console.log)
+  }
+
+  /* 点击按钮：弹窗 → 调接口 → 刷新列表 */
+  async function addComment(postId: number) {
+    const body = prompt('请输入评论：') // 浏览器自带弹窗
+    if (body === null) return // 用户点“取消”
+    if (!body.trim()) {
+      alert('评论不能为空')
+      return
+    }
+
+    const res = await fetch(`/api/posts/${postId}/comments`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ body }),
+    })
+
+    if (!res.ok) {
+      alert('提交失败')
+      return
+    }
+    const newComment = await res.json()
+    console.log(newComment);
+
+
+
+  }
+
+  return (
+    <main className="max-w-2xl mx-auto p-8">
+      <h1 className="text-2xl font-bold mb-4">Prisma + SQLite Demo</h1>
+
+      <form onSubmit={createPost} className="mb-6 space-y-2">
+        <input
+          className="w-full rounded border px-3 py-2"
+          placeholder="标题"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          required
+        />
+        <textarea
+          className="w-full rounded border px-3 py-2"
+          placeholder="内容（可选）"
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+        />
+        <button className="bg-blue-600 text-white px-4 py-2 rounded">发布</button>
+      </form>
+
+      <ul className="space-y-2">
+        {posts.map((p) => (
+          <li key={p.id} className="border rounded p-3">
+            <div className="font-semibold">{p.title}</div>
+            {p.content && <div className="text-sm text-gray-600">{p.content}</div>}
+            <div className="text-xs text-gray-400 mt-1">{p.createdAt}</div>
+            <div onClick={() => { addComment(p.id) }}>添加评论</div>
+            <div onClick={() => { getComments(p.id) }}>查询评论</div>
+          </li>
+        ))}
+      </ul>
+    </main>
+  )
 }
