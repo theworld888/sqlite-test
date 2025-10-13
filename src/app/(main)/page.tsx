@@ -155,5 +155,18 @@ import { useEffect, useState } from 'react'
 // }
 
 export default function Page() {
-  return <h1>home</h1>
+  return <>
+    <header className="sticky top-0 z-50 flex h-14 items-center justify-between bg-white px-4 shadow-sm">
+      <div className="text-lg font-bold text-pink-500">bilibili</div>
+      <div className="flex-1 mx-4">
+        <input
+          type="text"
+          placeholder="搜索视频、动态、用户"
+          className="w-full rounded-full bg-gray-100 px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-pink-400"
+        />
+      </div>
+      <div className="h-8 w-8 rounded-full bg-gray-300" />
+    </header>
+    <div>home</div>
+  </>
 }
