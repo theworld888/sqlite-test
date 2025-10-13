@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
-
+import Link from 'next/link'
 // type Comment = {
 //   id: number
 //   content: string
@@ -165,7 +165,9 @@ export default function Page() {
           className="w-full rounded-full bg-gray-100 px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-pink-400"
         />
       </div>
-      <div className="h-8 w-8 rounded-full bg-gray-300" />
+      <Link href="/login" className="h-8 w-8 rounded-full bg-gray-300" >
+
+      </Link>
     </header>
     <div>home</div>
   </>
