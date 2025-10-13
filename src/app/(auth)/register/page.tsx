@@ -28,23 +28,30 @@ export default function RegisterPage() {
     /** 提交注册 */
     const handleRegister = async () => {
         if (form.password !== form.confirm) return toast.error('两次密码不一致')
-        const res = await fetch('/api/auth/register', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                email: form.email,
-                username: form.username,
-                password: form.password,
-                code: form.code,
-            }),
-        })
-        if (res.ok) {
-            toast.success('注册成功！正在跳转...')
-            location.href = '/login' // 简单跳转，可换 router.push
-        } else {
-            const data = await res.json()
-            toast.error(data.message || '注册失败')
-        }
+        console.log({
+            email: form.email,
+            username: form.username,
+            password: form.password,
+            code: form.code,
+        });
+
+        // const res = await fetch('/api/auth/register', {
+        //     method: 'POST',
+        //     headers: { 'Content-Type': 'application/json' },
+        //     body: JSON.stringify({
+        //         email: form.email,
+        //         username: form.username,
+        //         password: form.password,
+        //         code: form.code,
+        //     }),
+        // })
+        // if (res.ok) {
+        //     toast.success('注册成功！正在跳转...')
+        //     location.href = '/login' // 简单跳转，可换 router.push
+        // } else {
+        //     const data = await res.json()
+        //     toast.error(data.message || '注册失败')
+        // }
     }
 
     return (
