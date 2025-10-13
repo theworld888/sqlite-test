@@ -4,7 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
 import { ChevronLeftIcon } from "@heroicons/react/16/solid";
-import ToastContainer from '@/components/Toast/ToastContainer'
+import ToastContainer from '@/app/components/Toast/ToastContainer'
 import { useEffect } from 'react'
 import VConsole from 'vconsole'
 

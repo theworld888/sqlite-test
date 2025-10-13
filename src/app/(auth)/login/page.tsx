@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import Link from 'next/link'
-import toast from '@/components/Toast'
+import toast from '@/app/components/Toast'
 import { ChevronLeftIcon } from '@heroicons/react/16/solid'
 export default function LoginPage() {
   const [mode, setMode] = useState<'sms' | 'pwd'>('pwd') // 短信/密码切换

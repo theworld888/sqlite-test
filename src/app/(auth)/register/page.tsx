@@ -1,8 +1,8 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { ChevronLeftIcon } from '@heroicons/react/24/outline'
-import toast from '@/components/Toast' // 全局 Toast
+import toast from '@/app/components/Toast' // 全局 Toast
 
 export default function RegisterPage() {
     const [form, setForm] = useState({
@@ -12,18 +12,39 @@ export default function RegisterPage() {
         confirm: '',
         code: '',
     })
-
-    /** 发送邮箱验证码 */
+    const [cooldown, setCooldown] = useState(0)
     const sendCode = async () => {
+
         if (!form.email) return toast.error('请先填写邮箱')
-        const res = await fetch('/api/auth/send-code', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: form.email }),
-        })
-        if (res.ok) toast.success('验证码已发送，请查收')
-        else toast.error('发送失败，请重试')
+
+        try {
+            const res = await fetch('/api/auth/send-code', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: form.email }),
+            })
+            const data = await res.json()
+
+            if (res.ok) {
+                toast.success('验证码已发送')
+                setCooldown(60) // 立即进入冷却
+            }else {
+                toast.error(data.message)
+                console.log(data.message);
+                
+            }
+        } catch (error) {
+            console.log(error, 'res');
+        }
+
     }
+
+    // 倒计时副作用
+    useEffect(() => {
+        if (cooldown <= 0) return
+        const t = setTimeout(() => setCooldown(c => c - 1), 1000)
+        return () => clearTimeout(t)
+    }, [cooldown])
 
     /** 提交注册 */
     const handleRegister = async () => {
@@ -55,83 +76,89 @@ export default function RegisterPage() {
     }
 
     return (
-        <div className="px-6 pt-8">
-            {/* 头部返回栏 */}
-            <header className="flex items-center mb-8">
-                <Link href="/login">
+        <>
+            <header className="flex h-12 items-center justify-between px-4 shadow-sm">
+                <Link href="/">
                     <ChevronLeftIcon className="h-6 w-6 text-gray-700" />
                 </Link>
-                <span className="ml-4 text-lg font-medium text-gray-900">注册</span>
+                <span className="text-base font-medium text-gray-900">
+                    注册
+                </span>
+                <div className="w-6" />
             </header>
+            <div className="px-6 pt-8">
+                {/* 头部返回栏 */}
 
-            {/* Logo */}
-            <div className="mb-8 flex justify-center">
-                <div className="h-14 w-14 rounded-full bg-gradient-to-br from-pink-400 to-blue-400" />
-            </div>
-
-            {/* 表单 */}
-            <div className="space-y-4">
-
-                <input
-                    className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-400"
-                    placeholder="账号（用户名）"
-                    value={form.username}
-                    onChange={(e) => setForm({ ...form, username: e.target.value })}
-                />
-                <input
-                    className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-400"
-                    placeholder="邮箱"
-                    type="email"
-                    value={form.email}
-                    onChange={(e) => setForm({ ...form, email: e.target.value })}
-                />
-                <div className="flex space-x-2">
-                    <input
-                        className="flex-1 rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-400"
-                        placeholder="邮箱验证码"
-                        value={form.code}
-                        onChange={(e) => setForm({ ...form, code: e.target.value })}
-                    />
-                    <button
-                        onClick={sendCode}
-                        type="button"
-                        className="rounded-lg bg-gray-200 px-4 py-3 text-sm text-gray-700 active:bg-gray-300"
-                    >
-                        发送验证码
-                    </button>
+                {/* Logo */}
+                <div className="mb-8 flex justify-center">
+                    <div className="h-14 w-14 rounded-full bg-gradient-to-br from-pink-400 to-blue-400" />
                 </div>
-                <input
-                    type="password"
-                    className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-400"
-                    placeholder="密码"
-                    value={form.password}
-                    onChange={(e) => setForm({ ...form, password: e.target.value })}
-                />
-                <input
-                    type="password"
-                    className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-400"
-                    placeholder="确认密码"
-                    value={form.confirm}
-                    onChange={(e) => setForm({ ...form, confirm: e.target.value })}
-                />
 
+                {/* 表单 */}
+                <div className="space-y-4">
+
+                    <input
+                        className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-400"
+                        placeholder="账号（用户名）"
+                        value={form.username}
+                        onChange={(e) => setForm({ ...form, username: e.target.value })}
+                    />
+                    <input
+                        className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-400"
+                        placeholder="邮箱"
+                        type="email"
+                        value={form.email}
+                        onChange={(e) => setForm({ ...form, email: e.target.value })}
+                    />
+                    <div className="flex space-x-2">
+                        <input
+                            className="flex-1 rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-400"
+                            placeholder="邮箱验证码"
+                            value={form.code}
+                            onChange={(e) => setForm({ ...form, code: e.target.value })}
+                        />
+                        <button
+                            onClick={sendCode}
+                            disabled={cooldown > 0}
+                            className={`rounded-lg px-4 py-3 text-sm w-28
+    ${cooldown > 0 ? 'bg-gray-300 text-gray-500' : 'bg-gray-200 text-gray-700 active:bg-gray-300'}`}
+                        >
+                            {cooldown > 0 ? `${cooldown}s` : '发送验证码'}
+                        </button>
+                    </div>
+                    <input
+                        type="password"
+                        className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-400"
+                        placeholder="密码"
+                        value={form.password}
+                        onChange={(e) => setForm({ ...form, password: e.target.value })}
+                    />
+                    <input
+                        type="password"
+                        className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-400"
+                        placeholder="确认密码"
+                        value={form.confirm}
+                        onChange={(e) => setForm({ ...form, confirm: e.target.value })}
+                    />
+
+                </div>
+
+                {/* 注册按钮 */}
+                <button
+                    onClick={handleRegister}
+                    className="mt-6 w-full rounded-full bg-pink-500 py-3 text-white shadow-md active:bg-pink-600"
+                >
+                    注册并登录
+                </button>
+
+                {/* 底部入口 */}
+                <div className="mt-6 text-center text-sm text-gray-500">
+                    已有账号？
+                    <Link href="/login" className="ml-1 text-pink-500 hover:underline">
+                        立即登录
+                    </Link>
+                </div>
             </div>
-
-            {/* 注册按钮 */}
-            <button
-                onClick={handleRegister}
-                className="mt-6 w-full rounded-full bg-pink-500 py-3 text-white shadow-md active:bg-pink-600"
-            >
-                注册并登录
-            </button>
-
-            {/* 底部入口 */}
-            <div className="mt-6 text-center text-sm text-gray-500">
-                已有账号？
-                <Link href="/login" className="ml-1 text-pink-500 hover:underline">
-                    立即登录
-                </Link>
-            </div>
-        </div>
+        </>
     )
 }

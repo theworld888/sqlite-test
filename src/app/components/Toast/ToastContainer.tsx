@@ -1,7 +1,7 @@
 'use client'
 import { AnimatePresence, motion } from 'framer-motion'
 import ToastItem from './ToastItem'
-import { useToastStore } from '@/store/useToastStore'
+import { useToastStore } from '@/app/store/useToastStore'
 
 export default function ToastContainer() {
     const { toasts } = useToastStore()

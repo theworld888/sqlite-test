@@ -1,5 +1,5 @@
-import { useToastStore } from '@/store/useToastStore'
-import type { ToastType } from '@/store/useToastStore'
+import { useToastStore } from '@/app/store/useToastStore'
+import type { ToastType } from '@/app/store/useToastStore'
 
 const toast = (type: ToastType, message: string, duration?: number) =>
   useToastStore.getState().add({ type, message, duration })
