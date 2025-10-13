@@ -5,11 +5,25 @@ import toast from '@/app/components/Toast'
 import { ChevronLeftIcon } from '@heroicons/react/16/solid'
 export default function LoginPage() {
   const [mode, setMode] = useState<'sms' | 'pwd'>('pwd') // 短信/密码切换
-  const [form, setForm] = useState({ phone: '', code: '', pwd: '' })
+  const [form, setForm] = useState({ username: '', code: '', password: '' })
 
-  const handleLogin = () => {
-    // 这里调你自己的登录接口
-    console.log(form)
+  const handleLogin = async () => {
+    const res = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: form.username, password: form.password }),
+    })
+    const data = await res.json()
+    if (!res.ok) {
+      toast.error(data.message) // 用户不存在 / 密码错误
+      return
+    }
+    // 成功
+    toast.success('登录成功')
+    console.log(data,'登录信息');
+    
+    localStorage.setItem('token', data.token) // 或 cookie
+    // location.href = '/' // 跳首页
   }
 
   return (
@@ -58,8 +72,8 @@ export default function LoginPage() {
           <input
             className="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-400"
             placeholder="请输入手机号"
-            value={form.phone}
-            onChange={(e) => setForm({ ...form, phone: e.target.value })}
+            value={form.username}
+            onChange={(e) => setForm({ ...form, username: e.target.value })}
           />
           {mode === 'sms' ? (
             <div className="flex space-x-2">
@@ -78,8 +92,8 @@ export default function LoginPage() {
               className="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-400"
               type="password"
               placeholder="请输入密码"
-              value={form.pwd}
-              onChange={(e) => setForm({ ...form, pwd: e.target.value })}
+              value={form.password}
+              onChange={(e) => setForm({ ...form, password: e.target.value })}
             />
           )}
         </div>
