@@ -56,23 +56,23 @@ export default function RegisterPage() {
             code: form.code,
         });
 
-        // const res = await fetch('/api/auth/register', {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify({
-        //         email: form.email,
-        //         username: form.username,
-        //         password: form.password,
-        //         code: form.code,
-        //     }),
-        // })
-        // if (res.ok) {
-        //     toast.success('注册成功！正在跳转...')
-        //     location.href = '/login' // 简单跳转，可换 router.push
-        // } else {
-        //     const data = await res.json()
-        //     toast.error(data.message || '注册失败')
-        // }
+        const res = await fetch('/api/auth/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                email: form.email,
+                username: form.username,
+                password: form.password,
+                code: form.code,
+            }),
+        })
+        if (res.ok) {
+            toast.success('注册成功！正在跳转...')
+            // location.href = '/login' // 简单跳转，可换 router.push
+        } else {
+            const data = await res.json()
+            toast.error(data.message || '注册失败')
+        }
     }
 
     return (
