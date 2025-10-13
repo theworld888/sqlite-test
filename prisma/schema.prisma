@@ -8,20 +8,57 @@ datasource db {
   url      = "file:./dev.db"
 }
 
-model Post {
-  id        Int       @id @default(autoincrement())
-  title     String
-  content   String?
-  published Boolean   @default(false)
-  createdAt DateTime  @default(now())
-  Comment   Comment[]
+// 用户表
+model User {
+  id        String   @id @default(cuid()) // 安全主键，比 Int 难遍历
+  email     String   @unique
+  password  String // 存 bcrypt 哈希，不要明文
+  name      String
+  avatar    String? // 头像 URL，可选
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // 一对多：文章
+  posts    Post[]
+  // 一对多：评论
+  comments Comment[]
 }
 
+// 文章表（示例，可保留）
+model Post {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String?
+  published Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // 归属用户
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  // 评论
+  comments Comment[]
+}
+
+// 评论表
 model Comment {
-  id     Int    @id @default(autoincrement())
-  body   String
-  postId Int // 外键字段
-  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  id   Int    @id @default(autoincrement())
+  body String
+
+  // 归属文章
+  postId Int
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  // 归属用户
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  // 二级回复：自引用
+  parentId Int?
+  parent   Comment?  @relation("ReplyThread", fields: [parentId], references: [id], onDelete: Cascade)
+  replies  Comment[] @relation("ReplyThread")
 
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
