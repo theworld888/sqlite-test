@@ -23,7 +23,7 @@ export default function LoginPage() {
     console.log(data,'登录信息');
     
     localStorage.setItem('token', data.token) // 或 cookie
-    // location.href = '/' // 跳首页
+    location.href = '/' // 跳首页
   }
 
   return (
@@ -71,7 +71,7 @@ export default function LoginPage() {
         <div className="space-y-4">
           <input
             className="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-400"
-            placeholder="请输入手机号"
+            placeholder="请输入账号"
             value={form.username}
             onChange={(e) => setForm({ ...form, username: e.target.value })}
           />

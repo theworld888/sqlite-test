@@ -19,26 +19,26 @@ export async function POST(req: NextRequest) {
       select: { id: true, password: true, email: true, name: true, avatar: true },
     })
     
-    // if (!user) {
-    //   return NextResponse.json({ message: '用户不存在' }, { status: 401 })
-    // }
+    if (!user) {
+      return NextResponse.json({ message: '用户不存在' }, { status: 401 })
+    }
 
-    // // 2. 验密码
-    // const ok = await bcrypt.compare(password, user.password)
-    // if (!ok) {
-    //   return NextResponse.json({ message: '密码错误' }, { status: 401 })
-    // }
+    // 2. 验密码
+    const ok = await bcrypt.compare(password, user.password)
+    if (!ok) {
+      return NextResponse.json({ message: '密码错误' }, { status: 401 })
+    }
 
-    // // 3. 生成 JWT
-    // const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET!, {
-    //   expiresIn: process.env.JWT_EXPIRES,
-    // })
+    // 3. 生成 JWT
+    const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET!, {
+      expiresIn: process.env.JWT_EXPIRES,
+    })
 
-    // // 4. 返回用户基础信息
-    // return NextResponse.json({
-    //   token,
-    //   user: { id: user.id, email: user.email, name: user.name, avatar: user.avatar },
-    // })
+    // 4. 返回用户基础信息
+    return NextResponse.json({
+      token,
+      user: { id: user.id, email: user.email, name: user.name, avatar: user.avatar },
+    })
   } catch (err: any) {
     if (err instanceof z.ZodError) {
       return NextResponse.json({ message: err.errors[0].message }, { status: 400 })
