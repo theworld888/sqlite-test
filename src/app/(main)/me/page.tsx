@@ -12,12 +12,11 @@ import { useEffect, useState } from 'react'
 export default function MePage() {
   const router = useRouter()
   const [user, setUser] = useState<User | null>(null)
-  console.log(123);
 
   useEffect(() => {
     const raw = localStorage.getItem('userInfo')
     const cacheUser: User | null = raw ? JSON.parse(raw) : null
-    console.log(raw, '666');
+    console.log(raw, 'raw');
 
     // 优先读 localStorage 瞬时展示（防闪烁）
     const cache: User | null = {
@@ -31,21 +30,34 @@ export default function MePage() {
       follower: 0,
     }
     setUser(cache)
+    const token = localStorage.getItem('token')
+    console.log(token,'token');
+    
 
+  
     // // 再拉全量数据（含硬币、关注等）
-    // fetch('/api/auth/me', { credentials: 'include' }) // 自动带 cookie
-    //   .then((r) => (r.ok ? r.json() : Promise.reject(r)))
-    //   .then((full) => {
-    //     setUser(full.user)
-    //     // 可选：把新数据再写回 localStorage
-    //     localStorage.setItem('avatar', full.user.avatar)
-    //     localStorage.setItem('nickname', full.user.name)
-    //     localStorage.setItem('level', String(full.user.level))
-    //   })
-    //   .catch(() => {
-    //     // 401/500 → 未登录或过期
-    //     router.push('/login')
-    //   })
+    fetch('/api/auth/me', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    }) // 自动带 cookie
+      .then((r) => (r.ok ? r.json() : Promise.reject(r)))
+      .then((full) => {
+        console.log(full, 'full');
+
+        setUser(full.user)
+        // 可选：把新数据再写回 localStorage
+        // localStorage.setItem('avatar', full.user.avatar)
+        // localStorage.setItem('nickname', full.user.name)
+        // localStorage.setItem('level', String(full.user.level))
+      })
+      .catch((err) => {
+        console.log(err, 'err');
+
+        // 401/500 → 未登录或过期
+        // router.push('/login')
+      })
   }, [])
   // 占位数据，后续接 /api/auth/me
   // const user = {
