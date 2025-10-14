@@ -6,6 +6,7 @@ import {
   Cog6ToothIcon
 } from '@heroicons/react/24/outline'
 import { User } from '@prisma/client'
+import { useTheme } from 'next-themes'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
@@ -31,10 +32,10 @@ export default function MePage() {
     }
     setUser(cache)
     const token = localStorage.getItem('token')
-    console.log(token,'token');
-    
+    console.log(token, 'token');
 
-  
+
+
     // // 再拉全量数据（含硬币、关注等）
     fetch('/api/auth/me', {
       method: 'GET',
@@ -77,6 +78,7 @@ export default function MePage() {
     { name: '消息', icon: ChatBubbleLeftIcon },
     { name: '夜间模式', icon: MoonIcon },
   ]
+  const { theme, setTheme } = useTheme()
 
   return (
     <div className="min-h-screen bg-white">
@@ -88,7 +90,7 @@ export default function MePage() {
             icons.map((tab) => {
               const Icon = tab.icon
               return (
-                <div key={tab.name} className="flex items-center space-x-1 ml-6">
+                <div onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} key={tab.name} className="flex items-center space-x-1 ml-6">
                   <Icon className={`h-6 w-6 text-gray-500`} />
                 </div>
               )

@@ -12,6 +12,7 @@ import { HomeIcon as HomeSolid, FireIcon as FireSolid, PlusCircleIcon as PlusSol
 import "./globals.css"
 import VConsole from 'vconsole'
 import { useEffect } from 'react'
+import { Providers } from '@/app/providers'
 
 const TABS = [
   { name: '首页', href: '/', icon: HomeIcon, iconSolid: HomeSolid },
@@ -35,7 +36,9 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
 
         {/* 内容区 */}
-        <main className="flex-1 overflow-y-auto bg-gray-50">{children}</main>
+        <main className="flex-1 overflow-y-auto bg-gray-50 bg-gradient-to-br from-[var(--bg-start)] to-[var(--bg-end)]">
+          <Providers>{children}</Providers>
+        </main>
 
         {/* 底部 TabBar */}
         <nav className="fixed w-[100vw] bottom-0 z-50 flex h-16 items-center justify-around border-t border-gray-200 bg-white">
