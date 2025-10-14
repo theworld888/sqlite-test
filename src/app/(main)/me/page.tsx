@@ -3,7 +3,8 @@
 import {
   ChatBubbleLeftIcon,
   MoonIcon,
-  Cog6ToothIcon
+  Cog6ToothIcon,
+  SunIcon
 } from '@heroicons/react/24/outline'
 import { User } from '@prisma/client'
 import { useTheme } from 'next-themes'
@@ -13,11 +14,12 @@ import { useEffect, useState } from 'react'
 export default function MePage() {
   const router = useRouter()
   const [user, setUser] = useState<User | null>(null)
-
+  const { theme, setTheme } = useTheme()
+  console.log(theme, 'theme');
   useEffect(() => {
     const raw = localStorage.getItem('userInfo')
     const cacheUser: User | null = raw ? JSON.parse(raw) : null
-    console.log(raw, 'raw');
+    // console.log(raw, 'raw');
 
     // 优先读 localStorage 瞬时展示（防闪烁）
     const cache: User | null = {
@@ -32,7 +34,7 @@ export default function MePage() {
     }
     setUser(cache)
     const token = localStorage.getItem('token')
-    console.log(token, 'token');
+    // console.log(token, 'token');
 
 
 
@@ -45,7 +47,7 @@ export default function MePage() {
     }) // 自动带 cookie
       .then((r) => (r.ok ? r.json() : Promise.reject(r)))
       .then((full) => {
-        console.log(full, 'full');
+        // console.log(full, 'full');
 
         setUser(full.user)
         // 可选：把新数据再写回 localStorage
@@ -78,24 +80,20 @@ export default function MePage() {
     { name: '消息', icon: ChatBubbleLeftIcon },
     { name: '夜间模式', icon: MoonIcon },
   ]
-  const { theme, setTheme } = useTheme()
+
+
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen">
       {/* ===== 顶部头部（与截图 1:1） ===== */}
       <div className="relative h-64 w-full rounded-b-3xl bg-gradient-to-br text-gray-500">
         {/* 第一行：时间 + 大会员标签 */}
         <div className="flex h-10 items-center justify-end px-5 pt-4 text-xs">
-          {
-            icons.map((tab) => {
-              const Icon = tab.icon
-              return (
-                <div onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} key={tab.name} className="flex items-center space-x-1 ml-6">
-                  <Icon className={`h-6 w-6 text-gray-500`} />
-                </div>
-              )
-            })}
-          {/* <Icon className={`h-6 w-6 text-gray-500`} /> */}
+          <Cog6ToothIcon className={`h-6 w-6 text-gray-500 ml-6`} />
+          <ChatBubbleLeftIcon className={`h-6 w-6 text-gray-500 ml-6`} />
+          {theme === 'dark' ?
+            <SunIcon onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} className={`h-6 w-6 text-gray-500 ml-6`} /> :
+            <MoonIcon onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} className={`h-6 w-6 text-gray-500 ml-6`} />}
         </div>
 
         {/* 第二行：头像 + 名字 + Lv + 空间入口 */}
@@ -113,7 +111,7 @@ export default function MePage() {
 
 
 
-        <div className="mt-4 grid grid-cols-3 gap-2 rounded-2xl bg-white/20 p-3 backdrop-blur">
+        <div className="mt-4 grid grid-cols-3 gap-2 rounded-2xl dark:text-white/50 p-3 backdrop-blur">
           <div className="text-center">
             <div className="text-lg ">{user?.dynamic}</div>
             <div className="text-xs opacity-80">动态</div>
@@ -130,7 +128,7 @@ export default function MePage() {
       </div>
 
       {/* ===== 下方留白区域（后续接内容） ===== */}
-      <div className="h-96 bg-gray-50">{/* 留白 */}</div>
+      <div className="h-96 ">{/* 留白 */}</div>
     </div >
   )
 }

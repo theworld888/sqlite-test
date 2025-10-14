@@ -1,8 +1,7 @@
-
 @import "tailwindcss";
 
-
-:root {
+@custom-variant dark (&:where(.dark, .dark *));
+/* :root {
   --background: #ffffff;
   --foreground: #171717;
 }
@@ -20,24 +19,5 @@
     --foreground: #ededed;
   }
 }
+ */
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@layer base {
-  :root {
-    --bg-start: #fde2e2; /* 粉起点 */
-    --bg-end: #dbeafe;   /* 蓝终点 */
-  }
-  .dark {
-    --bg-start: #1e1b4b; /* 深夜紫 */
-    --bg-end: #0f172a;   /* 深夜蓝黑 */
-  }
-}

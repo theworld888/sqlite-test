@@ -91,3 +91,11 @@ npx prisma migrate dev
 ✔ JWT + Cookie 鉴权  
 × Redis 缓存验证码  
 
+
+
+开启深色模式需要，不然无法识别 dark: 前缀
+
+参考文档 https://tailwindcss.com/docs/dark-mode
+```css
+@custom-variant dark (&:where(.dark, .dark *));
+```

@@ -31,31 +31,29 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   }, [])
   return (
     <>
-      <html><body>
-        {/* 顶部搜索栏 */}
+      <html>
+        <body>
+          {/* 内容区 */}
+          <main className="flex-1 overflow-y-auto">
+            <Providers>{children}</Providers>
+          </main>
 
-
-        {/* 内容区 */}
-        <main className="flex-1 overflow-y-auto bg-gray-50 bg-gradient-to-br from-[var(--bg-start)] to-[var(--bg-end)]">
-          <Providers>{children}</Providers>
-        </main>
-
-        {/* 底部 TabBar */}
-        <nav className="fixed w-[100vw] bottom-0 z-50 flex h-16 items-center justify-around border-t border-gray-200 bg-white">
-          {TABS.map((tab) => {
-            const isActive = pathname === tab.href
-            const Icon = isActive ? tab.iconSolid : tab.icon
-            return (
-              <Link key={tab.href} href={tab.href} className="flex flex-col items-center flex-1">
-                <Icon className={`h-6 w-6 ${isActive ? 'text-pink-500' : 'text-gray-500'}`} />
-                <span className={`mt-1 text-xs ${isActive ? 'text-pink-500' : 'text-gray-500'}`}>
-                  {tab.name}
-                </span>
-              </Link>
-            )
-          })}
-        </nav>
-      </body></html>
+          {/* 底部 TabBar */}
+          <nav className="fixed w-[100vw] bottom-0 z-50 flex h-16 items-center justify-around border-t border-gray-200 dark:border-gray-700">
+            {TABS.map((tab) => {
+              const isActive = pathname === tab.href
+              const Icon = isActive ? tab.iconSolid : tab.icon
+              return (
+                <Link key={tab.href} href={tab.href} className="flex flex-col items-center flex-1">
+                  <Icon className={`h-6 w-6 ${isActive ? 'text-pink-500' : 'text-gray-500'}`} />
+                  <span className={`mt-1 text-xs ${isActive ? 'text-pink-500' : 'text-gray-500'}`}>
+                    {tab.name}
+                  </span>
+                </Link>
+              )
+            })}
+          </nav>
+        </body></html>
     </>
   )
 }
