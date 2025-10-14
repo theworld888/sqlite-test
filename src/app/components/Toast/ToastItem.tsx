@@ -30,7 +30,7 @@ export default function ToastItem({ toast }: { toast: ToastMessage }) {
   <div className="flex-1 text-sm text-gray-900">{message}</div>
 
   {/* 关闭按钮 */}
-  <button onClick={() => remove(id)} className="ml-3 text-gray-400 hover:text-gray-600">
+  <button onClick={() => remove(id)} className="ml-3 text-gray-400 hover:text-gray-500">
     <XMarkIcon className="h-5 w-5" />
   </button>
 </div>

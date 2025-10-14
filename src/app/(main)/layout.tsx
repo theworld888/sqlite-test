@@ -38,8 +38,8 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
           const Icon = isActive ? tab.iconSolid : tab.icon
           return (
             <Link key={tab.href} href={tab.href} className="flex flex-col items-center flex-1">
-              <Icon className={`h-6 w-6 ${isActive ? 'text-pink-500' : 'text-gray-600'}`} />
-              <span className={`mt-1 text-xs ${isActive ? 'text-pink-500' : 'text-gray-600'}`}>
+              <Icon className={`h-6 w-6 ${isActive ? 'text-pink-500' : 'text-gray-500'}`} />
+              <span className={`mt-1 text-xs ${isActive ? 'text-pink-500' : 'text-gray-500'}`}>
                 {tab.name}
               </span>
             </Link>
