@@ -23,7 +23,8 @@ export default function LoginPage() {
     console.log(data,'登录信息');
     
     localStorage.setItem('token', data.token) // 或 cookie
-    location.href = '/' // 跳首页
+    localStorage.setItem('userInfo', JSON.stringify(data.user)) // 或 cookie
+    // location.href = '/' // 跳首页
   }
 
   return (

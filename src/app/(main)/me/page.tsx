@@ -1,29 +1,64 @@
 'use client'
-// cog-6-tooth
 
 import {
-  HomeIcon,
-  FireIcon,
-  PlusCircleIcon,
   ChatBubbleLeftIcon,
-  UserIcon,
   MoonIcon,
   Cog6ToothIcon
 } from '@heroicons/react/24/outline'
+import { User } from '@prisma/client'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
 export default function MePage() {
+  const router = useRouter()
+  const [user, setUser] = useState<User | null>(null)
+  console.log(123);
+
+  useEffect(() => {
+    const raw = localStorage.getItem('userInfo')
+    const cacheUser: User | null = raw ? JSON.parse(raw) : null
+    console.log(raw, '666');
+
+    // 优先读 localStorage 瞬时展示（防闪烁）
+    const cache: User | null = {
+      avatar: cacheUser?.avatar || '',
+      name: cacheUser?.name || '',
+      id: cacheUser?.id || '',
+      bCoin: '0.0',
+      coin: 0,
+      dynamic: 0,
+      following: 0,
+      follower: 0,
+    }
+    setUser(cache)
+
+    // // 再拉全量数据（含硬币、关注等）
+    // fetch('/api/auth/me', { credentials: 'include' }) // 自动带 cookie
+    //   .then((r) => (r.ok ? r.json() : Promise.reject(r)))
+    //   .then((full) => {
+    //     setUser(full.user)
+    //     // 可选：把新数据再写回 localStorage
+    //     localStorage.setItem('avatar', full.user.avatar)
+    //     localStorage.setItem('nickname', full.user.name)
+    //     localStorage.setItem('level', String(full.user.level))
+    //   })
+    //   .catch(() => {
+    //     // 401/500 → 未登录或过期
+    //     router.push('/login')
+    //   })
+  }, [])
   // 占位数据，后续接 /api/auth/me
-  const user = {
-    avatar: 'https://morefun-active.oss-cn-beijing.aliyuncs.com/test_gyj/f8ba735a4cebcf41ef79f9596cd6a34.jpg',
-    name: '药勺勺',
-    id: '123456',
-    level: 5,
-    bCoin: '0.0',
-    coin: 947,
-    dynamic: 545,
-    following: 7,
-    follower: 128,
-  }
+  // const user = {
+  //   avatar: 'https://morefun-active.oss-cn-beijing.aliyuncs.com/test_gyj/f8ba735a4cebcf41ef79f9596cd6a34.jpg',
+  //   name: '药勺勺',
+  //   id: '123456',
+  //   level: 5,
+  //   bCoin: '0.0',
+  //   coin: 947,
+  //   dynamic: 545,
+  //   following: 7,
+  //   follower: 128,
+  // }
 
   const icons = [
     { name: '动态', icon: Cog6ToothIcon },
@@ -51,10 +86,10 @@ export default function MePage() {
 
         {/* 第二行：头像 + 名字 + Lv + 空间入口 */}
         <div className="mt-3 flex items-center px-5">
-          <img src={user.avatar} alt="avatar" className="h-16 w-16 rounded-full border-2 border-white/40" />
+          <img src={user?.avatar} alt="avatar" className="h-16 w-16 rounded-full border-2 border-white/40" />
           <div className="ml-3 flex-1">
-            <div className="text-lg  text-pink-500">{user.name}</div>
-            <div className="mt-0.5 text-xs opacity-80">ID: {user.id}</div>
+            <div className="text-lg  text-pink-500">{user?.name}</div>
+            <div className="mt-0.5 text-xs opacity-80">ID: {user?.id}</div>
           </div>
           <div className="flex items-center space-x-1 text-xs">
 
@@ -66,15 +101,15 @@ export default function MePage() {
 
         <div className="mt-4 grid grid-cols-3 gap-2 rounded-2xl bg-white/20 p-3 backdrop-blur">
           <div className="text-center">
-            <div className="text-lg ">{user.dynamic}</div>
+            <div className="text-lg ">{user?.dynamic}</div>
             <div className="text-xs opacity-80">动态</div>
           </div>
           <div className="text-center">
-            <div className="text-lg ">{user.following}</div>
+            <div className="text-lg ">{user?.following}</div>
             <div className="text-xs opacity-80">关注</div>
           </div>
           <div className="text-center">
-            <div className="text-lg ">{user.follower}</div>
+            <div className="text-lg ">{user?.follower}</div>
             <div className="text-xs opacity-80">粉丝</div>
           </div>
         </div>

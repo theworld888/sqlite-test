@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { User } from '@prisma/client'
 // type Comment = {
 //   id: number
 //   content: string
@@ -155,6 +156,13 @@ import Link from 'next/link'
 // }
 
 export default function Page() {
+  const [avatar, setAvatar] = useState<string | null>(null)
+
+  useEffect(() => {
+    const raw = localStorage.getItem('userInfo')
+    const cacheUser: User | null = raw ? JSON.parse(raw) : null
+    setAvatar(cacheUser?.avatar || '')
+  }, [])
   return <>
     <header className="sticky top-0 z-50 flex h-14 items-center justify-between bg-white px-4 shadow-sm">
       <div className="text-lg font-bold text-pink-500">bilibili</div>
@@ -165,9 +173,14 @@ export default function Page() {
           className="w-full rounded-full bg-gray-100 px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-pink-400"
         />
       </div>
-      <Link href="/login" className="h-8 w-8 rounded-full bg-gray-300" >
-
-      </Link>
+      {
+        avatar ?
+          <Link href="/me" className="h-9 w-9 rounded-full bg-gray-300" >
+            <img src={avatar} alt="avatar" className="h-9 w-9 rounded-full border-2 border-white/40" />
+          </Link>
+          :
+          <Link href="/login" className="h-9 w-9 rounded-full bg-gray-300" ></Link>
+      }
     </header>
     <div>home</div>
   </>
