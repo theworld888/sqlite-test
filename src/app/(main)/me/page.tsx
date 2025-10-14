@@ -59,27 +59,14 @@ export default function MePage() {
         console.log(err, 'err');
 
         // 401/500 → 未登录或过期
-        // router.push('/login')
+        router.push('/login')
       })
   }, [])
-  // 占位数据，后续接 /api/auth/me
-  // const user = {
-  //   avatar: 'https://morefun-active.oss-cn-beijing.aliyuncs.com/test_gyj/f8ba735a4cebcf41ef79f9596cd6a34.jpg',
-  //   name: '药勺勺',
-  //   id: '123456',
-  //   level: 5,
-  //   bCoin: '0.0',
-  //   coin: 947,
-  //   dynamic: 545,
-  //   following: 7,
-  //   follower: 128,
-  // }
 
-  const icons = [
-    { name: '动态', icon: Cog6ToothIcon },
-    { name: '消息', icon: ChatBubbleLeftIcon },
-    { name: '夜间模式', icon: MoonIcon },
-  ]
+
+  const goSetting = () => {
+    router.push('/setting')
+  }
 
 
 
@@ -97,7 +84,7 @@ export default function MePage() {
         </div>
 
         {/* 第二行：头像 + 名字 + Lv + 空间入口 */}
-        <div className="mt-3 flex items-center px-5">
+        <div className="mt-3 flex items-center px-5" onClick={goSetting}>
           <img src={user?.avatar} alt="avatar" className="h-16 w-16 rounded-full border-2 border-white/40" />
           <div className="ml-3 flex-1">
             <div className="text-lg  text-pink-500">{user?.name}</div>
