@@ -13,6 +13,7 @@ import "./globals.css"
 import VConsole from 'vconsole'
 import { useEffect } from 'react'
 import { Providers } from '@/app/providers'
+import ConfirmDialog from '../components/ConfirmDialog'
 
 const TABS = [
   { name: '首页', href: '/', icon: HomeIcon, iconSolid: HomeSolid },
@@ -36,6 +37,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
           {/* 内容区 */}
           <main className="flex-1 overflow-y-auto">
             <Providers>{children}</Providers>
+            <ConfirmDialog />
           </main>
 
           {/* 底部 TabBar */}

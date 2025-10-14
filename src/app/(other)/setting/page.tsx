@@ -2,7 +2,12 @@
 import Link from 'next/link'
 import { ChevronLeftIcon } from '@heroicons/react/16/solid'
 import { useRouter } from 'next/navigation'
+import { useConfirmStore } from '@/app/store/useConfirmStore'
 export default function LoginPage() {
+
+    const { confirm } = useConfirmStore()
+
+
     const router = useRouter()
     const menu = [
         { name: '账号与安全', href: '/me/setting/account' },
@@ -12,13 +17,12 @@ export default function LoginPage() {
     ]
 
     const signOut = () => {
-        console.log('signOut')
-        localStorage.removeItem('userInfo')
-        localStorage.removeItem('token') // 如果之前存过
-
-        
-        // ③ 跳登录页
-        router.push('/login')
+        // 使用
+        confirm('退出登录', () => {
+            localStorage.removeItem('userInfo')
+            localStorage.removeItem('token') // 如果之前存过
+            router.push('/login')
+        })
     }
 
     return (

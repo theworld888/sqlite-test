@@ -24,7 +24,7 @@ export default function LoginPage() {
     
     localStorage.setItem('token', data.token) // 或 cookie
     localStorage.setItem('userInfo', JSON.stringify(data.user)) // 或 cookie
-    // location.href = '/' // 跳首页
+    location.href = '/' // 跳首页
   }
 
   return (
