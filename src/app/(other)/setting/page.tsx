@@ -3,6 +3,9 @@ import Link from 'next/link'
 import { ChevronLeftIcon } from '@heroicons/react/16/solid'
 import { useRouter } from 'next/navigation'
 import { useConfirmStore } from '@/app/store/useConfirmStore'
+import AvatarUpload from '@/app/components/AvatarUpload'
+
+
 export default function LoginPage() {
 
     const { confirm } = useConfirmStore()
@@ -36,6 +39,11 @@ export default function LoginPage() {
                 </span>
                 <div className="w-6" />
             </header>
+
+            <AvatarUpload onSuccess={(url) => {
+                console.log('新头像地址：', url)
+                // 后续：调用 /api/user/avatar 更新数据库
+            }} />
 
 
             <div className=" pt-4">

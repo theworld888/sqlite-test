@@ -20,7 +20,7 @@ export default function Page() {
         <input
           type="text"
           placeholder="搜索视频、动态、用户"
-          className="w-full rounded-full  px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-pink-400"
+          className="w-full rounded-full  px-4 py-2 text-sm outline-none bg-gray-100 dark:bg-gray-800 focus:ring-2 focus:ring-pink-400"
         />
       </div>
       {

@@ -45,7 +45,7 @@ export default function ConfirmDialog() {
                         </button>
                         <button
                             onClick={handleConfirm}
-                            className="flex-1 text-pink-500 py-2.5 text-lg   active:bg-pink-600"
+                            className="flex-1 text-pink-500 py-2.5 text-lg   active:bg-gray-50"
                         >
                             确定
                         </button>
