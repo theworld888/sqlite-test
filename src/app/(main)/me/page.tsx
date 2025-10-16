@@ -85,7 +85,13 @@ export default function MePage() {
 
         {/* 第二行：头像 + 名字 + Lv + 空间入口 */}
         <div className="mt-3 flex items-center px-5" onClick={goSetting}>
-          <img src={user?.avatar} alt="avatar" className="h-16 w-16 rounded-full border-2 border-white/40" />
+          {
+            user?.avatar ? <img src={user?.avatar} alt="avatar" className="h-14 w-14 rounded-full border-2 border-white/40" /> :
+              <div className="w-14 h-14 rounded-full bg-gray-300 flex items-center justify-center text-white">
+                {user?.name?.[0]?.toUpperCase() || 'U'}
+              </div>
+          }
+
           <div className="ml-3 flex-1">
             <div className="text-lg  text-pink-500">{user?.name}</div>
             <div className="mt-0.5 text-xs opacity-80">ID: {user?.id}</div>

@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
     // 4. 返回用户基础信息
     return NextResponse.json({
       token,
-      user: { id: user.id, email: user.email, name: user.name, avatar: user.avatar ? user.avatar : 'https://morefun-active.oss-cn-beijing.aliyuncs.com/test_gyj/f8ba735a4cebcf41ef79f9596cd6a34.jpg' },
+      user: { id: user.id, email: user.email, name: user.name, avatar: user.avatar ? user.avatar : '' },
     })
   } catch (err: any) {
     if (err instanceof z.ZodError) {
