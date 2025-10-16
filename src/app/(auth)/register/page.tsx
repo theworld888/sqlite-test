@@ -68,7 +68,7 @@ export default function RegisterPage() {
         })
         if (res.ok) {
             toast.success('注册成功！正在跳转...')
-            // location.href = '/login' // 简单跳转，可换 router.push
+            location.href = '/login' // 简单跳转，可换 router.push
         } else {
             const data = await res.json()
             toast.error(data.message || '注册失败')

@@ -6,11 +6,11 @@ import { randomCode } from '@/lib/auth'
 import { sendMail } from '@/lib/mail'
 import { prisma } from '@/lib/prisma'
 import { addMinutes } from 'date-fns'
-
+import { getRedis } from '@/lib/redis'
 const bodySchema = z.object({ email: z.string().email() })
 // console.log(bodySchema,'bodySchema');
 
-
+const redis = getRedis()
 // 常用域名（用于拼写提示）
 const COMMON_DOMAINS = [
   'qq.com', '163.com', '126.com', 'gmail.com', 'outlook.com',
@@ -63,25 +63,32 @@ export async function POST(req: NextRequest) {
 
     // 2. 域名 OK → 生成验证码并发送
     const code = randomCode()
-    await prisma.user.upsert({
-      where: { email },
-      update: {
-        emailVerifyToken: code,
-        emailVerifyExpire: addMinutes(new Date(), 10),
-      },
-      create: {
-        email,
-        name: email.split('@')[0],
-        password: 'CHANGE_ME',
-        emailVerifyToken: code,
-        emailVerifyExpire: addMinutes(new Date(), 10),
-      },
-    })
+    // ✅ 存入 Redis，设置 10 分钟过期
+    await redis.set(`verify:${email}`, code, 'EX', 600)
 
-    const res = await sendMail(email, '验证码', `<p>你的验证码是 <b>${code}</b>，10 分钟内有效。</p>`)
-    console.log('测试', res);
+    await sendMail(email, '验证码', `<p>你的验证码是 <b>${code}</b>，10 分钟内有效。</p>`)
 
     return NextResponse.json({ message: '已发送' })
+
+    // await prisma.user.upsert({
+    //   where: { email },
+    //   update: {
+    //     emailVerifyToken: code,
+    //     emailVerifyExpire: addMinutes(new Date(), 10),
+    //   },
+    //   create: {
+    //     email,
+    //     name: email.split('@')[0],
+    //     password: 'CHANGE_ME',
+    //     emailVerifyToken: code,
+    //     emailVerifyExpire: addMinutes(new Date(), 10),
+    //   },
+    // })
+
+    // const res = await sendMail(email, '验证码', `<p>你的验证码是 <b>${code}</b>，10 分钟内有效。</p>`)
+    // console.log('测试', res);
+
+    // return NextResponse.json({ message: '已发送' })
   } catch (err) {
 
     if (err instanceof z.ZodError) {
