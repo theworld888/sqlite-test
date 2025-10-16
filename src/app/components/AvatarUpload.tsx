@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useConfirmStore } from '@/app/store/useConfirmStore'
 import { useTheme } from 'next-themes'
 
-export default function AvatarUpload({ onSuccess }: { onSuccess: (url: string) => void }) {
+export default function AvatarUpload({ onSuccess, customTrigger }: { onSuccess: (url: string) => void, customTrigger?: (openFilePicker: () => void) => React.ReactNode }) {
   const [progress, setProgress] = useState(0)
   const { confirm } = useConfirmStore()
   const { theme } = useTheme()
@@ -23,9 +23,9 @@ export default function AvatarUpload({ onSuccess }: { onSuccess: (url: string) =
     const form = new FormData()
     form.append('token', token)
     form.append('file', file)
-    form.append('key', 'avatar/'+url.split('/').pop()!) // 文件名
-    console.log(url.split('/').pop()!,'+====+++==');
-    
+    form.append('key', 'avatar/' + url.split('/').pop()!) // 文件名
+    console.log(url.split('/').pop()!, '+====+++==');
+
 
     const xhr = new XMLHttpRequest()
     xhr.open('POST', 'https://upload-z2.qiniup.com') // 华南机房，按实际改
@@ -43,9 +43,9 @@ export default function AvatarUpload({ onSuccess }: { onSuccess: (url: string) =
   }
 
   const handleClick = () => {
-    confirm('确定上传头像？', () => {
-      document.getElementById('avatar-input')?.click()
-    })
+    document.getElementById('avatar-input')?.click()
+    // confirm('确定上传头像？', () => {
+    // })
   }
 
   return (
@@ -57,15 +57,21 @@ export default function AvatarUpload({ onSuccess }: { onSuccess: (url: string) =
         onChange={handleFile}
         className="hidden"
       />
-      <button
-        onClick={handleClick}
-        className="rounded-full bg-pink-500 px-6 py-2 text-sm text-white shadow-md active:bg-pink-600"
-      >
-        上传头像
-      </button>
+      {/* 如果传入 customTrigger 就用它，否则用默认按钮 */}
+      {customTrigger ? (
+        customTrigger(handleClick)
+      ) : (
+        <button
+          onClick={handleClick}
+          className="rounded-full bg-pink-500 px-6 py-2 text-sm text-white shadow-md active:bg-pink-600"
+        >
+          上传头像
+        </button>
+      )}
+
 
       {/* 进度条（B 站味） */}
-      {progress > 0 && (
+      {/* {progress > 0 && (
         <div className="w-32 rounded-full bg-gray-200">
           <div
             className="rounded-full bg-pink-500 py-1 text-center text-xs text-white"
@@ -74,7 +80,7 @@ export default function AvatarUpload({ onSuccess }: { onSuccess: (url: string) =
             {progress}%
           </div>
         </div>
-      )}
+      )} */}
     </div>
   )
 }

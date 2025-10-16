@@ -3,16 +3,29 @@ import Link from 'next/link'
 import { ChevronLeftIcon } from '@heroicons/react/16/solid'
 import { useRouter } from 'next/navigation'
 import { useConfirmStore } from '@/app/store/useConfirmStore'
-import AvatarUpload from '@/app/components/AvatarUpload'
+import AvatarEditModal from '@/app/components/AvatarEditModal'
+import { useEffect, useState } from 'react'
 
 
-export default function LoginPage() {
-
+export default function SettingPage() {
     const { confirm } = useConfirmStore()
+    const [isOpen, setIsOpen] = useState(false)
+    const [avatar, setAvatar] = useState('')
+    console.log(1234);
+    
+    useEffect(() => {
+        console.log(123);
 
+        const raw = localStorage.getItem('userInfo')
+        console.log(raw, 'raw');
 
+        const user = raw ? JSON.parse(raw) : null
+        setAvatar(user?.avatar || '')
+
+    }, [])
     const router = useRouter()
     const menu = [
+        { name: '头像设置', href: '/me/setting/avatar' },
         { name: '账号与安全', href: '/me/setting/account' },
         { name: '通知设置', href: '/me/setting/notify' },
         { name: '隐私设置', href: '/me/setting/privacy' },
@@ -40,10 +53,14 @@ export default function LoginPage() {
                 <div className="w-6" />
             </header>
 
+            <AvatarEditModal defaultImage={avatar} isOpen={isOpen} onClose={() => {
+                setIsOpen(false)
+            }} onSave={(url) => { }} />
+            {/* 
             <AvatarUpload onSuccess={(url) => {
                 console.log('新头像地址：', url)
                 // 后续：调用 /api/user/avatar 更新数据库
-            }} />
+            }} /> */}
 
 
             <div className=" pt-4">
@@ -52,6 +69,9 @@ export default function LoginPage() {
                         key={m.name}
                         onClick={() => {
                             console.log(m.name);
+                            if (m.name === '头像设置') {
+                                setIsOpen(true)
+                            }
 
                         }}
                         className="w-full flex items-center justify-between  bg-white dark:bg-[#17181a] p-3  "
