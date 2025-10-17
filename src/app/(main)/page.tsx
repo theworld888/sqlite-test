@@ -38,6 +38,12 @@ export default function Page() {
           </Link>
       }
     </header>
-    <div>home</div>
+    <div>
+      <h1>home123</h1>
+      <img src="https://chanel-mf.oss-cn-beijing.aliyuncs.com/jd-c2b/test/1760666264706.png" alt="" />
+      <img src="/5.jpg" alt="" />
+      <img src="/1760666264706.png" alt="" />
+      <img src="https://chanel-mf.oss-cn-beijing.aliyuncs.com/jd-c2b/test/H1.jpg" alt="" />
+    </div>
   </>
 }

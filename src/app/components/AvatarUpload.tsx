@@ -2,45 +2,63 @@
 import { useState } from 'react'
 import { useConfirmStore } from '@/app/store/useConfirmStore'
 import { useTheme } from 'next-themes'
-
+import { processImageFile } from "@/lib/imageProcessor";
+import convertHeicToImage from "heic-detect-converter";
 export default function AvatarUpload({ onSuccess, customTrigger }: { onSuccess: (url: string) => void, customTrigger?: (openFilePicker: () => void) => React.ReactNode }) {
-  const [progress, setProgress] = useState(0)
-  const { confirm } = useConfirmStore()
-  const { theme } = useTheme()
-
   const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
+    const file = e.target.files?.[0];
+    if (!file) return;
 
-    // ① 获取直传 token
-    const res = await fetch('/api/upload/token', {
-      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-    })
-    if (!res.ok) return alert('获取上传凭证失败')
-    const { token, url } = await res.json()
+    try {
+      // ① 获取直传 token
+      const res = await fetch('/api/upload/token', {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      });
 
-    // ② 直传七牛（不进后端内存）
-    const form = new FormData()
-    form.append('token', token)
-    form.append('file', file)
-    form.append('key', 'avatar/' + url.split('/').pop()!) // 文件名
-    console.log(url.split('/').pop()!, '+====+++==');
-
-
-    const xhr = new XMLHttpRequest()
-    xhr.open('POST', 'https://upload-z2.qiniup.com') // 华南机房，按实际改
-    xhr.upload.onprogress = (e) => setProgress(Math.round((e.loaded / e.total) * 100))
-    xhr.onload = () => {
-      if (xhr.status === 200) {
-        onSuccess(url) // 上传成功，返回最终 URL
-        setProgress(0)
-      } else {
-        alert('上传失败')
-        setProgress(0)
+      if (!res.ok) {
+        alert('获取上传凭证失败');
+        return;
       }
+
+      const { token, url } = await res.json();
+
+      let convertedFile: Blob;
+      try {
+        // 上传前转换 HEIC
+        convertedFile = await convertHeicToImage(file);
+      } catch (err) {
+        console.log('HEIC 转换失败', err);
+        alert('图片格式不支持或转换失败');
+        return;
+      }
+
+      // ② 直传七牛（不进后端内存）
+      const form = new FormData();
+      form.append('token', token);
+      form.append('file', convertedFile);
+      form.append('key', 'avatar/' + url.split('/').pop()!);
+
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', 'https://upload-z2.qiniup.com'); // 华南机房，按实际改
+      xhr.onload = () => {
+        if (xhr.status === 200) {
+          onSuccess(url); // 上传成功，返回最终 URL
+        } else {
+          alert('上传失败');
+          console.error('上传失败，状态码:', xhr.status, xhr.responseText);
+        }
+      };
+      xhr.onerror = () => {
+        alert('上传请求出错');
+        console.error('上传请求错误');
+      };
+      xhr.send(form);
+    } catch (err) {
+      console.error('上传流程异常', err);
+      alert('上传失败，请稍后重试');
     }
-    xhr.send(form)
-  }
+  };
+
 
   const handleClick = () => {
     document.getElementById('avatar-input')?.click()
