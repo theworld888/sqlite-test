@@ -1,7 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { User } from '@prisma/client'
 
 
 export default function Page() {
@@ -9,7 +8,7 @@ export default function Page() {
   const [name, setName] = useState<string | null>(null)
   useEffect(() => {
     const raw = localStorage.getItem('userInfo')
-    const cacheUser: User | null = raw ? JSON.parse(raw) : null
+    const cacheUser = raw ? JSON.parse(raw) : null
     setAvatar(cacheUser?.avatar || '')
     setName(cacheUser?.name || '')
   }, [])

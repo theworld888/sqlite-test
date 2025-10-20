@@ -6,7 +6,6 @@ import {
   Cog6ToothIcon,
   SunIcon
 } from '@heroicons/react/24/outline'
-import { User } from '@prisma/client'
 import { useTheme } from 'next-themes'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -17,7 +16,7 @@ export default function MePage() {
   const { theme, setTheme } = useTheme()
   useEffect(() => {
     const raw = localStorage.getItem('userInfo')
-    const cacheUser: User | null = raw ? JSON.parse(raw) : null
+    const cacheUser = raw ? JSON.parse(raw) : null
     // console.log(raw, 'raw');
 
     // 优先读 localStorage 瞬时展示（防闪烁）
