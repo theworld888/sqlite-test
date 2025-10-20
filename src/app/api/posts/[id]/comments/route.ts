@@ -43,7 +43,7 @@ export async function POST(
     }
 
     const comment = await prisma.comment.create({
-        data: { body: body.trim(), postId },
+        data: { body: body.trim(), postId } as any,
     })
 
     return NextResponse.json(comment, { status: 201 })

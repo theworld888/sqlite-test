@@ -12,7 +12,7 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   const body = await req.json()
   const post = await prisma.post.create({
-    data: { title: body.title, content: body.content },
+    data: { title: body.title, content: body.content } as any,
   })
   return NextResponse.json(post, { status: 201 })
 }

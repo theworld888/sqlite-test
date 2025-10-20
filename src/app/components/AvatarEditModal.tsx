@@ -46,32 +46,6 @@ export default function AvatarEditModal({ isOpen, onClose, onSave, defaultImage 
                 />
                 <div className="bg-[#313131] w-70 h-10 text-white text-center leading-10 rounded-sm">保存图片</div>
             </div>
-
-
-            {/* <div className="bg-white dark:bg-[#17181a] p-4 rounded-md w-80 flex flex-col items-center space-y-4">
-
-                <AvatarUpload onChange={(base64) => setTempAvatar(base64)} />
-
-                <div className="flex w-full space-x-2">
-                    <button
-                        className="flex-1 bg-gray-300 dark:bg-gray-700 text-black dark:text-white py-2 rounded"
-                        onClick={onClose}
-                    >
-                        取消
-                    </button>
-                    <button
-                        className="flex-1 bg-blue-500 text-white py-2 rounded"
-                        onClick={() => {
-                            if (tempAvatar) {
-                                onSave(tempAvatar)
-                                onClose()
-                            }
-                        }}
-                    >
-                        保存
-                    </button>
-                </div>
-            </div> */}
         </div>
     )
 }

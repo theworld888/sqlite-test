@@ -2,13 +2,11 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { User } from '@prisma/client'
-import { useTheme } from 'next-themes'
 
 
 export default function Page() {
   const [avatar, setAvatar] = useState<string | null>(null)
   const [name, setName] = useState<string | null>(null)
-  const { theme, setTheme } = useTheme()
   useEffect(() => {
     const raw = localStorage.getItem('userInfo')
     const cacheUser: User | null = raw ? JSON.parse(raw) : null

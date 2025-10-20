@@ -89,7 +89,7 @@ export async function POST(req: NextRequest) {
     // console.log('测试', res);
 
     // return NextResponse.json({ message: '已发送' })
-  } catch (err) {
+  } catch (err: any) {
 
     if (err instanceof z.ZodError) {
       return NextResponse.json(

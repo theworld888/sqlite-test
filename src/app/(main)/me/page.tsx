@@ -13,16 +13,15 @@ import { useEffect, useState } from 'react'
 
 export default function MePage() {
   const router = useRouter()
-  const [user, setUser] = useState<User | null>(null)
+  const [user, setUser] = useState<any | null>(null)
   const { theme, setTheme } = useTheme()
-  console.log(theme, 'theme');
   useEffect(() => {
     const raw = localStorage.getItem('userInfo')
     const cacheUser: User | null = raw ? JSON.parse(raw) : null
     // console.log(raw, 'raw');
 
     // 优先读 localStorage 瞬时展示（防闪烁）
-    const cache: User | null = {
+    const cache: any | null = {
       avatar: cacheUser?.avatar || '',
       name: cacheUser?.name || '',
       id: cacheUser?.id || '',

@@ -30,6 +30,7 @@ export async function POST(req: NextRequest) {
     }
 
     // 3. 生成 JWT
+    // @ts-ignore
     const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET!, {
       expiresIn: process.env.JWT_EXPIRES,
     })
@@ -41,7 +42,7 @@ export async function POST(req: NextRequest) {
     })
   } catch (err: any) {
     if (err instanceof z.ZodError) {
-      return NextResponse.json({ message: err.errors[0].message }, { status: 400 })
+      return NextResponse.json({ message: err.issues[0].message }, { status: 400 })
     }
     return NextResponse.json({ message: err }, { status: 500 })
   }

@@ -36,8 +36,8 @@ importers:
         specifier: ^12.23.24
         version: 12.23.24(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       heic-detect-converter:
-        specifier: ^0.0.1
-        version: 0.0.1
+        specifier: ^0.0.8
+        version: 0.0.8
       heic2any:
         specifier: ^0.0.4
         version: 0.0.4
@@ -87,6 +87,9 @@ importers:
       '@tailwindcss/postcss':
         specifier: ^4
         version: 4.1.14
+      '@types/fast-levenshtein':
+        specifier: ^0.0.4
+        version: 0.0.4
       '@types/jsonwebtoken':
         specifier: ^9.0.10
         version: 9.0.10
@@ -794,6 +797,9 @@ packages:
   '@tootallnate/quickjs-emscripten@0.23.0':
     resolution: {integrity: sha512-C5Mc6rdnsaJDjO3UpGW/CQTHtCKaYlScZTly4JIu97Jxo/odCiH0ITnDXSJPTOrEKk/ycSZ0AOgTmkDtkOsvIA==}
 
+  '@types/fast-levenshtein@0.0.4':
+    resolution: {integrity: sha512-tkDveuitddQCxut1Db8eEFfMahTjOumTJGPHmT9E7KUH+DkVq9WTpVvlfenf3S+uCBeu8j5FP2xik/KfxOEjeA==}
+
   '@types/jsonwebtoken@9.0.10':
     resolution: {integrity: sha512-asx5hIG9Qmf/1oStypjanR7iKTv0gXQ1Ov/jfrX6kS/EO0OFni8orbmGCn0672NHR3kXHwpAwR+B368ZGN/2rA==}
 
@@ -1134,8 +1140,8 @@ packages:
     resolution: {integrity: sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ==}
     engines: {node: '>= 0.4'}
 
-  heic-detect-converter@0.0.1:
-    resolution: {integrity: sha512-kjXzqXn+uCykmQKVmZysXqvGDlPv6Rmd8AQqQxwbjr9ehYxBySsZV8iOwTmIeq1SJ+mZ6hwxMNhS/6w4VCd9eA==}
+  heic-detect-converter@0.0.8:
+    resolution: {integrity: sha512-7e1SrStZabAMqTLUuRXbM1SW/aGaf/e0/ojbmLwLmGA2N9jaoFLWg/3KS07nCcu/aAjmEnwj135eihrNSG6OPw==}
 
   heic2any@0.0.4:
     resolution: {integrity: sha512-3lLnZiDELfabVH87htnRolZ2iehX9zwpRyGNz22GKXIu0fznlblf0/ftppXKNqS26dqFSeqfIBhAmAj/uSp0cA==}
@@ -2648,6 +2654,8 @@ snapshots:
 
   '@tootallnate/quickjs-emscripten@0.23.0': {}
 
+  '@types/fast-levenshtein@0.0.4': {}
+
   '@types/jsonwebtoken@9.0.10':
     dependencies:
       '@types/ms': 2.1.0
@@ -2960,7 +2968,7 @@ snapshots:
     dependencies:
       function-bind: 1.1.2
 
-  heic-detect-converter@0.0.1:
+  heic-detect-converter@0.0.8:
     dependencies:
       heic2any: 0.0.4
 

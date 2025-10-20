@@ -3,16 +3,22 @@ import Link from 'next/link'
 import { ChevronLeftIcon } from '@heroicons/react/16/solid'
 import { useRouter } from 'next/navigation'
 import { useConfirmStore } from '@/app/store/useConfirmStore'
-import AvatarEditModal from '@/app/components/AvatarEditModal'
+// import AvatarEditModal from '@/app/components/AvatarEditModal'
 import { useEffect, useState } from 'react'
+import dynamic from 'next/dynamic'
 
 
 export default function SettingPage() {
+    // 动态导入，禁用 SSR
+    const AvatarEditModal = dynamic(
+        () => import('@/app/components/AvatarEditModal'),
+        { ssr: false }
+    )
     const { confirm } = useConfirmStore()
     const [isOpen, setIsOpen] = useState(false)
     const [avatar, setAvatar] = useState('')
     console.log(1234);
-    
+
     useEffect(() => {
         console.log(123);
 

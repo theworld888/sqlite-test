@@ -1,8 +1,4 @@
 'use client'
-import { useState } from 'react'
-import { useConfirmStore } from '@/app/store/useConfirmStore'
-import { useTheme } from 'next-themes'
-import { processImageFile } from "@/lib/imageProcessor";
 import convertHeicToImage from "heic-detect-converter";
 export default function AvatarUpload({ onSuccess, customTrigger }: { onSuccess: (url: string) => void, customTrigger?: (openFilePicker: () => void) => React.ReactNode }) {
   const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {

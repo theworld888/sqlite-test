@@ -1,7 +1,7 @@
 'use client'
 import { useEffect } from 'react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import { useToastStore } from '@/app/store/useToastStore'
+import { ToastMessage, useToastStore } from '@/app/store/useToastStore'
 
 export default function ToastItem({ toast }: { toast: ToastMessage }) {
   const { remove } = useToastStore()

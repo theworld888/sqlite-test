@@ -39,7 +39,6 @@ export async function POST(req: NextRequest) {
       email,
       name: username,
       password: await bcrypt.hash(password, 10),
-      emailVerified: true,
     },
   })
 
